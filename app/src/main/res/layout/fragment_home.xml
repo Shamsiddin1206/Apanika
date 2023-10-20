@@ -58,5 +58,6 @@
         android:layout_marginTop="15dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         android:orientation="vertical"
-        app:spanCount="2"/>
+        app:spanCount="2"
+        tools:listitem="@layout/product_item"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

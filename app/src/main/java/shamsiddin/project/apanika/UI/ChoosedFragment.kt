@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import shamsiddin.project.apanika.Adapters.ChoosedAdapter
 import shamsiddin.project.apanika.DataClasses.Product
 import shamsiddin.project.apanika.Networking.MySharedPreferences
@@ -40,10 +41,15 @@ class ChoosedFragment : Fragment() {
 
         binding.choosedRecycler.adapter = ChoosedAdapter(choosedList, object : ChoosedAdapter.OnBuy{
             override fun onBuy(product: Product) {
-                binding.congratulations.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "You have not added your card yet", Toast.LENGTH_SHORT).show()
             }
 
-        }, requireContext())
+        }, requireContext(), object : ChoosedAdapter.OnPressed{
+            override fun onPressed(product: Product) {
+                parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
+            }
+
+        })
 
         binding.backtoMain.setOnClickListener {
             binding.congratulations.visibility = View.GONE

@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/product_image_card"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="130dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

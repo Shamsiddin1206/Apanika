@@ -15,7 +15,7 @@ import shamsiddin.project.apanika.DataClasses.ProductData
 import shamsiddin.project.apanika.Networking.MySharedPreferences
 import shamsiddin.project.apanika.R
 
-class ProductAdapter(var list: MutableList<Product>, var onSelected: OnSelected): RecyclerView.Adapter<ProductAdapter.MyViewHolder>() {
+class ProductAdapter(var list: MutableList<Product>, var onSelected: OnSelected, var onBosildi: OnBosildi): RecyclerView.Adapter<ProductAdapter.MyViewHolder>() {
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
         var rasm = view.findViewById<ImageView>(R.id.product_image)
         var nomi = view.findViewById<TextView>(R.id.product_title)
@@ -42,9 +42,17 @@ class ProductAdapter(var list: MutableList<Product>, var onSelected: OnSelected)
         holder.korzina.setOnClickListener {
             onSelected.onSelected(a)
         }
+
+        holder.itemView.setOnClickListener {
+            onBosildi.onBosildi(a)
+        }
     }
 
     interface OnSelected{
         fun onSelected(product: Product)
+    }
+
+    interface OnBosildi{
+        fun onBosildi(product: Product)
     }
 }

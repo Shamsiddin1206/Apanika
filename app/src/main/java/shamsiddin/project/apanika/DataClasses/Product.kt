@@ -1,5 +1,7 @@
 package shamsiddin.project.apanika.DataClasses
 
+import java.io.Serializable
+
 data class Product(
     val brand: String,
     val category: String,
@@ -13,4 +15,4 @@ data class Product(
     val thumbnail: String,
     val title: String,
     var status: Boolean = false
-)
+):Serializable

@@ -16,7 +16,7 @@ import shamsiddin.project.apanika.DataClasses.Product
 import shamsiddin.project.apanika.Networking.MySharedPreferences
 import shamsiddin.project.apanika.R
 
-class ChoosedAdapter(var list: MutableList<Product>, var onBuy: OnBuy, var context: Context) : RecyclerView.Adapter<ChoosedAdapter.MyViewHolder>(){
+class ChoosedAdapter(var list: MutableList<Product>, var onBuy: OnBuy, var context: Context, var onPressed: OnPressed) : RecyclerView.Adapter<ChoosedAdapter.MyViewHolder>(){
     val mySharedPreferences = MySharedPreferences.newInstance(context)
     var b = mySharedPreferences.GetSelectedCarsList()
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -37,9 +37,10 @@ class ChoosedAdapter(var list: MutableList<Product>, var onBuy: OnBuy, var conte
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val a = list[position]
-        holder.narx.text = a.price.toString()
+        holder.narx.text = "$ " + a.price.toString() + ".00"
         holder.title.text = a.title
         holder.reyting.text = a.rating.toString()
         holder.rasm.load(a.thumbnail)
@@ -54,9 +55,17 @@ class ChoosedAdapter(var list: MutableList<Product>, var onBuy: OnBuy, var conte
 //            mySharedPreferences.GetSelectedCarsList().remove(a)
 //            notifyItemRemoved(position)
         }
+
+        holder.itemView.setOnClickListener {
+            onPressed.onPressed(a)
+        }
     }
 
     interface OnBuy{
         fun onBuy(product: Product)
+    }
+
+    interface OnPressed{
+        fun onPressed(product: Product)
     }
 }

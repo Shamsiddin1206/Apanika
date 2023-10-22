@@ -1,14 +1,16 @@
 package shamsiddin.project.apanika.UI
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import okhttp3.internal.notify
+import coil.load
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,6 +47,7 @@ class HomeFragment : Fragment() {
     lateinit var mySharedPreferences: MySharedPreferences
     private val api = APIClient.getInstance().create(APIService::class.java)
     lateinit var binding: FragmentHomeBinding
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,6 +84,11 @@ class HomeFragment : Fragment() {
                                                         binding.LoginFragment.visibility = View.VISIBLE
                                                     }
                                                 }
+                                            }, object : ProductAdapter.OnBosildi{
+                                                override fun onBosildi(product: Product) {
+                                                    parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
+                                                }
+
                                             })
                                         }
                                     }
@@ -102,6 +110,11 @@ class HomeFragment : Fragment() {
                                                     }else{
                                                         binding.LoginFragment.visibility = View.VISIBLE
                                                     }
+                                                }
+
+                                            }, object : ProductAdapter.OnBosildi{
+                                                override fun onBosildi(product: Product) {
+                                                    parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
                                                 }
 
                                             })
@@ -128,6 +141,7 @@ class HomeFragment : Fragment() {
         binding.enterLogin.setOnClickListener {
             if (!binding.userTitle.text.isNullOrEmpty() && !binding.password.text.isNullOrEmpty()){
                 api.login(Login(binding.userTitle.text.toString(), binding.password.text.toString())).enqueue(object : Callback<User>{
+                    @SuppressLint("SetTextI18n")
                     override fun onResponse(
                         call: Call<User>,
                         response: Response<User>
@@ -139,6 +153,8 @@ class HomeFragment : Fragment() {
                                     mySharedPreferences.SetSelectedCarsList(selectedProducts)
                                     users.add(response.body()!!)
                                     mySharedPreferences.setLoginData(users)
+                                    binding.personProfileImg.load(users[0].image)
+                                    binding.personName.text = users[0].firstName + " " + users[0].lastName
                                 }else{
                                     Toast.makeText(requireContext(), "Wrong password", Toast.LENGTH_SHORT).show()
                                 }
@@ -177,6 +193,11 @@ class HomeFragment : Fragment() {
                             }
                         }
 
+                    }, object : ProductAdapter.OnBosildi{
+                        override fun onBosildi(product: Product) {
+                            parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
+                        }
+
                     })
                 }
             }
@@ -212,6 +233,11 @@ class HomeFragment : Fragment() {
                                             }
                                         }
 
+                                    }, object : ProductAdapter.OnBosildi{
+                                        override fun onBosildi(product: Product) {
+                                            parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
+                                        }
+
                                     })
                                     binding.ProductsRecycler.visibility = View.VISIBLE
                                     binding.cantFound.visibility = View.GONE
@@ -231,6 +257,11 @@ class HomeFragment : Fragment() {
                                                     binding.LoginFragment.visibility = View.VISIBLE
                                                 }
                                             }
+                                        }, object : ProductAdapter.OnBosildi{
+                                            override fun onBosildi(product: Product) {
+                                                parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
+                                            }
+
                                         })
                                         binding.ProductsRecycler.visibility = View.VISIBLE
                                         binding.cantFound.visibility = View.GONE
@@ -261,7 +292,57 @@ class HomeFragment : Fragment() {
 
 
         binding.homeScreenSelected.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.main, ChoosedFragment()).commit()
+            if (mySharedPreferences.getLoginData().isNotEmpty()){
+                parentFragmentManager.beginTransaction().replace(R.id.main, ChoosedFragment()).commit()
+            }else{
+                binding.LoginFragment.visibility = View.VISIBLE
+            }
+        }
+
+
+
+        if (users.isNotEmpty()){
+            binding.personProfileImg.load(users[0].image)
+            binding.personName.text = users[0].firstName + " " + users[0].lastName
+        }
+        binding.homeScreenMenu.setOnClickListener {
+            if (mySharedPreferences.getLoginData().isNotEmpty()){
+                val animation_menu = AnimationUtils.loadAnimation(requireContext(), R.anim.menu_animation_start)
+                binding.menutask.startAnimation(animation_menu)
+                binding.menutask.visibility = View.VISIBLE
+                binding.darkmode.visibility = View.VISIBLE
+                binding.realHomeFragment.isClickable = false
+
+            }else{
+                binding.LoginFragment.visibility = View.VISIBLE
+            }
+        }
+        binding.backtomain.setOnClickListener {
+            binding.menutask.visibility = View.GONE
+            val animation_finish = AnimationUtils.loadAnimation(requireContext(), R.anim.menu_animation_finish)
+            binding.menutask.startAnimation(animation_finish)
+            binding.darkmode.visibility = View.GONE
+            binding.realHomeFragment.isContextClickable = true
+        }
+        binding.linerNotification.setOnClickListener {
+            Toast.makeText(requireContext(), "You do not have any notifications", Toast.LENGTH_SHORT).show()
+        }
+        binding.help.setOnClickListener {
+            Toast.makeText(requireContext(), "Email to takhirovshamsiddin@gmail.com", Toast.LENGTH_SHORT).show()
+        }
+        binding.logout.setOnClickListener {
+            users.clear()
+            mySharedPreferences.setLoginData(users)
+            Toast.makeText(requireContext(), "You logged out", Toast.LENGTH_SHORT).show()
+            binding.menutask.visibility = View.GONE
+            val animation_finish = AnimationUtils.loadAnimation(requireContext(), R.anim.menu_animation_finish)
+            binding.menutask.startAnimation(animation_finish)
+            binding.personProfileImg.setImageResource(R.drawable.personprofile)
+            binding.darkmode.visibility = View.GONE
+            binding.realHomeFragment.isContextClickable = true
+        }
+        binding.linerMyorders.setOnClickListener {
+            Toast.makeText(requireContext(), "You have not added your card yet", Toast.LENGTH_SHORT).show()
         }
 
         return binding.root

@@ -22,8 +22,10 @@
         android:src="@drawable/back_ic"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
-    <ImageView
-        android:id="@+id/single_product_image"
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/product_iamge_vp"
+        android:background="#E6000000"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginStart="30dp"
@@ -31,16 +33,14 @@
         app:layout_constraintTop_toBottomOf="@id/back_from_single_product"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/img_1"
-        android:layout_marginTop="15dp"
-        android:scaleType="fitXY"
-        android:elevation="5dp"/>
+        android:layout_marginTop="15dp"/>
+
     <TextView
         android:id="@+id/single_product_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/single_product_image"
-        app:layout_constraintStart_toStartOf="@id/single_product_image"
+        app:layout_constraintTop_toBottomOf="@id/product_iamge_vp"
+        app:layout_constraintStart_toStartOf="@id/product_iamge_vp"
         android:text="BMW M5 Series"
         android:textStyle="bold"
         android:textSize="25sp"

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import coil.load
+import shamsiddin.project.apanika.Adapters.ViewPagerAdapter
 import shamsiddin.project.apanika.DataClasses.Product
 import shamsiddin.project.apanika.R
 import shamsiddin.project.apanika.databinding.FragmentSingleProductBinding
@@ -33,7 +34,9 @@ class SingleProductFragment : Fragment() {
     ): View {
         binding = FragmentSingleProductBinding.inflate(inflater, container, false)
 
-        binding.singleProductImage.load(param1!!.thumbnail)
+        binding.productIamgeVp.adapter = ViewPagerAdapter(
+            param1!!.images
+        )
         binding.singleProductDescription.text = param1!!.description
         binding.singleProductName.text = param1!!.title
         binding.singleProductPrice.text = param1!!.price.toString() + ".00$"

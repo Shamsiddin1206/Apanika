@@ -39,17 +39,25 @@ class ChoosedFragment : Fragment() {
         choosedList = mySharedPreferences.GetSelectedCarsList()
         Log.d("List", "onCreateView: $choosedList")
 
-        binding.choosedRecycler.adapter = ChoosedAdapter(object : ChoosedAdapter.OnBuy{
-            override fun onBuy(product: Product) {
-                Toast.makeText(requireContext(), "You have not added your card yet", Toast.LENGTH_SHORT).show()
-            }
+        if (mySharedPreferences.GetSelectedCarsList().isNotEmpty()){
+            binding.choosedRecycler.visibility = View.VISIBLE
+            binding.notfounded.visibility = View.GONE
+            binding.choosedRecycler.adapter = ChoosedAdapter(object : ChoosedAdapter.OnBuy{
+                override fun onBuy(product: Product) {
+                    Toast.makeText(requireContext(), "You have not added your card yet", Toast.LENGTH_SHORT).show()
+                }
 
-        }, requireContext(), object : ChoosedAdapter.OnPressed{
-            override fun onPressed(product: Product) {
-                parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
-            }
+            }, requireContext(), object : ChoosedAdapter.OnPressed{
+                override fun onPressed(product: Product) {
+                    parentFragmentManager.beginTransaction().replace(R.id.main, SingleProductFragment.newInstance(product)).commit()
+                }
 
-        })
+            })
+        }else{
+            binding.choosedRecycler.visibility = View.GONE
+            binding.notfounded.visibility = View.VISIBLE
+        }
+
 
         binding.backtoMain.setOnClickListener {
             binding.congratulations.visibility = View.GONE

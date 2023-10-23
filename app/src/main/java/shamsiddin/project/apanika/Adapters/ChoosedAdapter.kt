@@ -16,7 +16,7 @@ import shamsiddin.project.apanika.DataClasses.Product
 import shamsiddin.project.apanika.Networking.MySharedPreferences
 import shamsiddin.project.apanika.R
 
-class ChoosedAdapter(var list: MutableList<Product>, var onBuy: OnBuy, var context: Context, var onPressed: OnPressed) : RecyclerView.Adapter<ChoosedAdapter.MyViewHolder>(){
+class ChoosedAdapter(var onBuy: OnBuy, var context: Context, var onPressed: OnPressed) : RecyclerView.Adapter<ChoosedAdapter.MyViewHolder>(){
     val mySharedPreferences = MySharedPreferences.newInstance(context)
     var b = mySharedPreferences.GetSelectedCarsList()
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -33,13 +33,13 @@ class ChoosedAdapter(var list: MutableList<Product>, var onBuy: OnBuy, var conte
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return b.size
     }
 
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val a = list[position]
+        val a = b[position]
         holder.narx.text = "$ " + a.price.toString() + ".00"
         holder.title.text = a.title
         holder.reyting.text = a.rating.toString()
@@ -48,12 +48,10 @@ class ChoosedAdapter(var list: MutableList<Product>, var onBuy: OnBuy, var conte
             Log.d("Wishlist", "onBindViewHolder: $b")
             b.remove(a)
             mySharedPreferences.SetSelectedCarsList(b)
-            notifyItemRemoved(position)
+            notifyDataSetChanged()
         }
         holder.buy.setOnClickListener {
             onBuy.onBuy(a)
-//            mySharedPreferences.GetSelectedCarsList().remove(a)
-//            notifyItemRemoved(position)
         }
 
         holder.itemView.setOnClickListener {

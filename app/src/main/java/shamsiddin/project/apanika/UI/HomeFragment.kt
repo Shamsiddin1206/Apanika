@@ -345,6 +345,10 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "You have not added your card yet", Toast.LENGTH_SHORT).show()
         }
 
+        binding.linerMyorders.setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.main, CardFragment()).addToBackStack("Home").commit()
+        }
+
         return binding.root
     }
 

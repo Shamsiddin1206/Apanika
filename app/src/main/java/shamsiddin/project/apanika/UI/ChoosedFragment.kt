@@ -39,7 +39,7 @@ class ChoosedFragment : Fragment() {
         choosedList = mySharedPreferences.GetSelectedCarsList()
         Log.d("List", "onCreateView: $choosedList")
 
-        binding.choosedRecycler.adapter = ChoosedAdapter(choosedList, object : ChoosedAdapter.OnBuy{
+        binding.choosedRecycler.adapter = ChoosedAdapter(object : ChoosedAdapter.OnBuy{
             override fun onBuy(product: Product) {
                 Toast.makeText(requireContext(), "You have not added your card yet", Toast.LENGTH_SHORT).show()
             }

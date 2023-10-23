@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import shamsiddin.project.apanika.DataClasses.CartData
 import shamsiddin.project.apanika.DataClasses.Login
 import shamsiddin.project.apanika.DataClasses.ProductData
 import shamsiddin.project.apanika.DataClasses.User
@@ -26,5 +27,8 @@ interface APIService {
 
     @POST("/auth/login")
     fun login(@Body login: Login): Call<User>
+
+    @GET("/carts/user/{id}")
+    fun getBuyedById(@Path("id")id: Int): Call<CartData>
 
 }
